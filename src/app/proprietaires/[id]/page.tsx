@@ -145,16 +145,31 @@ export default async function PageProprietaire({
 
           <section className="carte text-sm">
             <h2 className="mb-2 font-semibold">Établissements ({etablissements.length})</h2>
-            <ul className="space-y-1">
+            <ul className="divide-y divide-slate-100">
               {etablissements.map((e) => (
-                <li key={e.id}>
-                  <Link href={`/etablissements/${e.id}`} className="lien">
-                    {e.nom}
-                  </Link>{" "}
-                  <span className="text-slate-500">
-                    · {e.types_commerce?.nom} · {e.ville}
-                    {e.distance_min != null && ` · ${e.distance_min} min`}
-                  </span>
+                <li key={e.id} className="py-2 first:pt-0 last:pb-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <Link href={`/etablissements/${e.id}`} className="lien font-medium">
+                      {e.nom}
+                    </Link>
+                    {e.types_commerce?.nom && (
+                      <span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600">{e.types_commerce.nom}</span>
+                    )}
+                  </div>
+                  <div className="text-slate-600">
+                    {[e.adresse, [e.code_postal, e.ville].filter(Boolean).join(" ")].filter(Boolean).join(", ")}
+                  </div>
+                  <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-slate-600">
+                    {e.telephone ? (
+                      <span>
+                        Tél. <Telephone tel={e.telephone} />
+                      </span>
+                    ) : (
+                      <span className="text-slate-400">Pas de téléphone</span>
+                    )}
+                    {e.distance_min != null && <span>{e.distance_min} min</span>}
+                    {e.franchise && <span>{e.franchise}</span>}
+                  </div>
                 </li>
               ))}
             </ul>
